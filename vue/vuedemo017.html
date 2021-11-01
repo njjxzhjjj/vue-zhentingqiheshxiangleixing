@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>计算属性和监听器</title>
+    <script src="/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div>
+            <span>计算属性由来:因为插值表达式不适合去调用js的方法或者其他运算（通称计算） </span><br />
+            <span>需要放入到，js中，才更优雅（因为可以更好的代码提示)，他是升级插值表达式功能的,
+                针对的是 插值表达式</span> <br />
+
+            <ul>
+                <li v-for="(item, index) in foods" :key="item.id">{{item.name}}:{{item.price/100}}元</li>
+            </ul>
+
+            <span>不建议上面的写法，建议使用data的计算属性</span> <br />
+            <ul>
+                <li v-for="(item, index) in priceComputed" :key="item.id">{{item.name}}:{{item.price}}元</li>
+            </ul>
+
+            <button @click="btnUpPrice(2000)">点击原味鱼粉 涨价为20元</button>
+            <button @click="btnUpPrice1(2000)">点击原味鱼粉 涨价为20元</button>
+        </div>
+    </div>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    foods: [
+                        {
+                            "id": 01,
+                            "name": "原味鱼粉",
+                            "price": 1200     //数据库里面存分
+                        },
+                        {
+                            "id": 02,
+                            "name": "金汤鱼粉",
+                            "price": 1300     //数据库里面存分
+                        },
+                        {
+
+                            "id": 03,
+                            "name": "酸辣鱼粉",
+                            "price": 1400     //数据库里面存分
+                        },
+                        {
+
+                            "id": 04,
+                            "name": "番茄鱼粉",
+                            "price": 1400     //数据库里面存分
+                        },
+                        {
+
+                            "id": 05,
+                            "name": "肥牛鱼粉",
+                            "price": 1800     //数据库里面存分
+                        },
+                    ]
+
+                }
+            },
+            methods: {
+                btnUpPrice:function(money){
+                    console.log("涨价了",money);
+                    console.log(this.priceComputed);
+                    this.priceComputed[0].price=money;
+                },
+                //上面每执行一次，就调用一次  // 任何data中数据变化立即重新计算
+                btnUpPrice1:function(money){
+                    this.foods[0].price=money; ///任何data中数据变化立即重新计算,不建议
+                          //或者数据 就是单个 ！！！
+                },
+                
+
+            },
+            //计算
+            computed: {
+                // 直接当做普通属性调用不加括号
+                // 任何data中数据变化立即重新计算
+                // 计算属性会缓存
+                priceComputed: {
+                    // console.log(this.foods);
+                    // var foodsList=this.foods;
+                    // for (let i = 0; i < foodsList.length; i++) {
+                    //     foodsList[i].price=foodsList[i].price/100;
+                    //     console.log(foodsList[i].price);
+
+                    // }
+                    // return foodsList
+
+                    //set
+                    set: function (newPrice) {
+                        console.log(this.newPrice);
+                         this.foods[0].price =newPrice;
+                    },
+
+
+                    //get 计算
+                    get: function () {
+                        var foodsList = this.foods;
+                        for (let i = 0; i < foodsList.length; i++) {
+                            foodsList[i].price = foodsList[i].price / 100;
+                            console.log(foodsList[i].price);
+
+                        }
+                        return foodsList
+
+                    },
+
+
+                }
+
+            },
+            created() {
+
+            }
+
+
+        })
+    </script>
+</body>
+
+</html>

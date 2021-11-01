@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鱼粉 </title>
+    <script src="/vue.js"></script>
+</head>
+
+<body>
+
+
+    <div id="app">
+        <span>今日份鱼粉 {{food.name}}:{{food.price/100}}元</span>   <br> 
+            要涨价啦
+        <select @change="change($event)"  >
+            <option value="">请选择</option>
+            <option v-for="(item,index) in newPrice" :key="index" :value='item'>涨价{{item*100}}%</option>  
+            
+        </select> 
+       
+  
+       
+    </div>
+
+    <script>
+      
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {  
+                    food :  
+                        { 
+                            "name": "原味鱼粉",
+                            "price": 1200
+                        } ,
+                        newPrice:[
+                            0.25,0.5,1  
+                        ],
+                        ProductActive:"0" 
+                }
+            },
+            methods: { 
+                change:function(event) { 
+                    this.ProductActive = event.target.value; //获取option对应的value值
+                    //console.log("你选中了",this.ProductActive)
+                  
+                    this.priceComputed.newPrice2=  (this.food.price + (this.food.price*this.ProductActive))/100
+                   // alert(newPrice2) 
+                }
+           }, 
+            computed: {
+                priceComputed: { 
+                    get: function () {
+                        var food3 = this.food
+                        food3.price = (this.food.price + (this.food.price*this.ProductActive)) 
+                        console.log(food3.price); 
+                        return food3
+                    },
+                     
+                }
+            },
+            cerate() {
+
+            }
+        })
+    </script>
+</body>
+
+</html>
